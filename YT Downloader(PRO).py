@@ -1,10 +1,3 @@
-#VUI LÒNG KHÔNG ĐƯỢC CHỈNH SỬA BẤT KÌ NỘI DUNG NÀO BÊN DƯỚI NHÉ!
-#CHỈ ĐƯỢC THAM KHẢO THUI
-
-
-#👉Mọi thắc mắc vui lòng ib qua fb: https://bom.so/FB_ADMIN
-
-#©️NGUỒN: TXA VLOG!!
 from tkinter import *
 import requests, pyautogui
 from pathlib import Path
@@ -53,7 +46,7 @@ import socket, sys
 #KTRA 
 toaster = ToastNotifier()
 # Tên file thực thi của ứng dụng
-app_exe = "YT DOWNLOADER TXA PRO V3.7.5.exe"
+app_exe = "YT DOWNLOADER TXA PRO V3.7.7.exe"
 
 # Lấy đường dẫn tuyệt đối đến thư mục chứa script hiện tại
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -215,7 +208,7 @@ def start_application():
 txa = Tk()
 txa.geometry('670x500')
 txa.resizable(0,0)
-txa.title(f"Trình tải xuống video Youtube V3.7.5 - Pro(USER: {username})")
+txa.title(f"Trình tải xuống video Youtube V3.7.7 - Pro(USER: {username})")
 # txa.title("Trình tải xuống video Youtube - DEMO")
 txa.resizable(False, False)
 # txa.iconbitmap('logo.ico')
@@ -233,6 +226,7 @@ save_exit = parser.get('setting', 'tbao_exit')
 detect_link = parser.get('setting', 'detect_link')
 na_dat = str(day)+'/'+str(month)+'/'+str(year)+' '+str(hour)+':'+str(minute)+':'+str(second)
 set_ngay = parser.set('setting', 'ngayhientai', na_dat)
+check_ne = parser.get('APP', 'check_start')
 with open ('user_pro.ini', 'w') as f:
     parser.write(f)
 txa.configure(background=save_bgcolor)
@@ -243,8 +237,42 @@ print(save_bgcolor)
 print("Thời gian mở lần cuối: ",lay_ngay, f'bởi {username}')
 print("Trạng thái thông báo: ",save_tttb)
 print("Nhận diện link video khi quay lại ứng dụng:", detect_link)
+if check_ne == "True":
+    chec_ne = "Có"
+elif check_ne == "False":
+    chec_ne = "Không nhé"
+else:
+    chec_ne = "Lỗi rồi!"
+if save_migi == "1":
+    save_m = "Bật lên"
+elif save_migi == "2":
+    save_m = "Tắt đi"
+else:
+    save_m = "Lỗi rồi, key không có!"
+if save_tttb == "1":
+    save_t = "Có"
+elif save_tttb == "2":
+    save_t = "Không"
+else:
+    save_t = "FILE CẤU HÌNH LỖI KEY NÀY RỒI!"
+
+print(f"Kiểm tra kết nối khi khởi động: {chec_ne}")
 # Biến toàn cục để lưu tiêu đề
 selected_title = ""
+
+if not os.path.exists('log_start.txt'):
+    with open('log_start.txt', 'w') as f:
+        f.write("")
+with open('log_start.txt', 'w') as fa:
+    fa.write(f"Ngôn ngữ hệ thống: {na_dat}\nTrạng thái giọng nói: {save_m}")
+    fa.write("\nMA EXIT: "+save_exit)
+    fa.write(save_path+'\n')
+    fa.write(f'Mã màu(định dạng hex): {save_bgcolor}\n')
+    fa.write(f"\nThời gian mở lần cuối: {lay_ngay} bởi {username}")
+    fa.write("\nTrạng thái thông báo: "+save_t)
+    fa.write("\nNhận diện link video khi quay lại ứng dụng: "+detect_link)
+    fa.write(f"\nKiểm tra kết nối khi khởi động: {chec_ne}")
+    fa.close()
 
 # Kiểm tra và tạo file lịch sử nếu không tồn tại
 if not os.path.exists(log_file):
@@ -327,9 +355,9 @@ def update(event=None):
                 data = json.loads(response.read())
 
                 # Get the current version and compare it to the online version
-                current_version = f"3.7.5"
+                current_version = f"3.7.7"
                 online_version = f"{data['pban_pro']}"
-                if current_version == online_version:
+                if current_version == online_version or current_version > online_version:
                     if lang_sys == 'vi_VN' or lang_sys == "cp65001":
                         messagebox.showinfo("Không có bản cập nhật khả dụng", "App của bạn đã được cập nhật ở phiên bản mới nhất😂.")
                     else:
@@ -496,6 +524,7 @@ def setting(event=None):
     save_exit = parser.get('setting', 'tbao_exit')
     detect_link = parser.get('setting', 'detect_link')
     check_duration = parser.get('setting', 'duration')
+    check_ne = parser.get('APP', 'check_start')
     var = IntVar()
     bar = IntVar()
     den = IntVar()
@@ -527,6 +556,13 @@ def setting(event=None):
         time_label.place(x=10, y=110)
         time_entry = Entry(uk, textvariable=time_entry_var, font=("Arial", 13), width=10)
         time_entry.place(x=260, y=110)
+        check_net = Label(uk, text="Kiểm tra kết nối tới server mỗi khi khởi động: ", borderwidth=4, relief="raised", font=("Verdana", 7), background='#0fc0ff')
+        check_net.place(x=10, y=140)
+        car = IntVar()
+        check_net_bt_1 = Radiobutton(uk, text="Có", variable=car, value=1)
+        check_net_bt_1.place(x=260, y=140)
+        check_net_bt_2 = Radiobutton(uk, text="Không", variable=car, value=2)
+        check_net_bt_2.place(x=300, y=140)
         # Thiết lập giá trị ban đầu và trạng thái của checkbox
         if detect_link == 'True':
             detect_link_checkbox_var.set(True)
@@ -566,6 +602,14 @@ def setting(event=None):
         time_entry = Entry(uk, textvariable=time_entry_var, font=("Arial", 13), width=10)
         time_entry.place(x=260, y=110)
 
+        check_net = Label(uk, text="Check connection to server on startup: ", borderwidth=3, relief="raised", font=("Verdana", 7), background='#0fc0f6')
+        check_net.place(x=10, y=140)
+        car = IntVar()
+        check_net_bt_1 = Radiobutton(uk, text="Yes", variable=car, value=1)
+        check_net_bt_1.place(x=260, y=140)
+        check_net_bt_2 = Radiobutton(uk, text="No", variable=car, value=2)
+        check_net_bt_2.place(x=300, y=140)
+
         if detect_link == 'True':
             detect_link_checkbox_var.set(True)
             detect_link_status_label.config(text="Enable")
@@ -583,6 +627,12 @@ def setting(event=None):
         var.set('2')
     else:
             print("LOI")
+    if check_ne == "True":
+        car.set('1')
+    elif check_ne == "False":
+        car.set('2')
+    else:
+        print("K tồn tại khóa này")
     if save_migi == "1":
             bar.set('1')
     elif save_migi == "2":
@@ -615,6 +665,13 @@ def setting(event=None):
         bol = str(bar.get())
         dol = str(den.get())
         dlo = time_entry_var.get()
+        clo = str(car.get())
+        if clo == "1":
+            check_status_net = "True"
+        elif clo == "2":
+            check_status_net = "False"
+        else:
+            check_status_net = "None"
         global detect_link
         if detect_link_checkbox_var.get() == 1:
             detect_link = True
@@ -628,7 +685,7 @@ def setting(event=None):
 
         print(bar.get())
         print(var.get())
-        print(f"HELO THOIWG IA: {dlo}")
+        print(f"HELO THOIWG IA: {dlo}/{clo}")
         if lol == "0":
             lol = "1"
         parser.set('setting','tbao', lol)
@@ -636,6 +693,7 @@ def setting(event=None):
         parser.set('setting','tbao_exit', dol)
         parser.set('setting', 'detect_link', str(detect_link))
         parser.set('setting', 'duration', dlo)  # Lưu giá trị nhân 1000 (dạng chuỗi) vào file cấu hình
+        parser.set('APP', 'check_start', check_status_net)
         with open("user_pro.ini", 'w')as f:
             parser.write(f)
         print("Đã lưu!")
@@ -1035,6 +1093,7 @@ def download():
         pass
     else:
         print("LOI FILE CAU HINH VUI LONG XEM LAI!")
+        file_path = "giu sơ pờ rồ chấm i nờ i"
         # toaster.showtoast("Bị lỗi❌", f"File cấu hình {file_path} bị lỗi rồi kìa mau xem xem đi nào!!", duration=4)
         speak(f"File cấu hình {file_path} bị lỗi rồi kìa mau xem xem đi nào!!")
         # URL VIDEO DÀI: https://www.youtube.com/watch?v=51aCi69Dw9o
@@ -1231,13 +1290,13 @@ def info(event=None):
     if lang_sys == 'vi_VN' or lang_sys == "cp65001":
         messagebox.showinfo("INFO", "💖APP ĐƯỢC VIẾT BỞI TXA VLOG!💖")
         messagebox.showinfo("INFO", "✝Chức năng: TẢI XUỐNG VIDEO YOUTUBE")
-        messagebox.showinfo("INFO", "✔VERSION 3.7.5\n Nếu có thắc mắc ib fb: https://bom.so/FB_ADMIN")
+        messagebox.showinfo("INFO", "✔VERSION 3.7.7\n Nếu có thắc mắc ib fb: https://bom.so/FB_ADMIN")
     else:
         messagebox.showinfo("INFO", "💖APP WRITE BY TXA VLOG!💖")
         messagebox.showinfo("INFO", "✝Function: DOWNLOAD YOUTUBE VIDEO")
-        messagebox.showinfo("INFO", "✔VERSION 3.7.5\n If you have any questions ib fb: https://bom.so/FB_ADMIN")
+        messagebox.showinfo("INFO", "✔VERSION 3.7.7\n If you have any questions ib fb: https://bom.so/FB_ADMIN")
 def check(e):
-    ht ="3.7.5"
+    ht ="3.7.7"
     # htt = ht.split(',')
     print("ĐANG KIỂM TRA PHIÊN BẢN VÀ SẼ TBÁO NẾU CÓ PHIÊN BẢN MỚI VÌ VẬY HÃY ĐỢI!!")
     for d in range(2):
@@ -1353,7 +1412,7 @@ btn_download = Button(txa, text="Download", font=("Arial bold", 15), background=
 status = Label(txa, font=("Arial bold", 15), background='#ff0fff')
 status.place(x=90, y=160)
 
-phot = Label(txa, text='rrr', font=("Digital-7", 12), background='#a074cd')
+phot = Label(txa, text='ĐG LOAD...', font=("Digital-7", 12), background='#a074cd')
 phot.place(x=0, y=310)
 
 #URL HISTORY TABLE
@@ -1419,7 +1478,7 @@ def show_update_info():
     update_info_window.title("Thông tin cập nhật")
 
     # Tạo label hiển thị thông tin phiên bản
-    version_label = Label(update_info_window, text="Phiên bản: YT DOWNLOADER PRO TXA V3.7.5", font=("Arial", 14, "bold"), fg="blue")
+    version_label = Label(update_info_window, text="Phiên bản: YT DOWNLOADER PRO TXA V3.7.7", font=("Arial", 14, "bold"), fg="blue")
     version_label.pack()
 
     # Tạo label hiển thị thông tin tác giả
@@ -1445,6 +1504,7 @@ def show_update_info():
     feature_listbox.insert(END, "8. Sửa đổi lại tính năng thông báo bằng giọng nói và nếu trong quá trình tải có bị vấn đề gì về tính năng này thì cứ bỏ qua nó nhé!")
     feature_listbox.insert(END, "9. Thêm tính năng kiểm tra kết nối mạng trước khi vô ứng dụng!")
     feature_listbox.insert(END, "10. Thay đổi logo app thành logo mới kỉ niệm 1 năm ra mắt app!!!")
+    feature_listbox.insert(END, "11. Đã thêm thằng lựa chọn xem có nên auto kết nối đến server mỗi khi mở app hay không nhé!")
     feature_listbox.insert(END, "👉Hết rồi đó.")
 
     # Tạo label hiển thị thông tin liên hệ
@@ -1504,7 +1564,7 @@ if lang_sys == 'vi_VN' or lang_sys == "cp65001":
         txa.withdraw()
         image=Image.open("logo-app.ico")
         menu=(item('Hiển thị app', show_window), item('Thoát', quit_window), item('Check cập nhật', check), item('Trang web', contact))
-        icon=pystray.Icon("name", image, "YT DOWNLOADER TXA - PRO (VN) V3.7.5", menu)
+        icon=pystray.Icon("name", image, "YT DOWNLOADER TXA - PRO (VN) V3.7.7", menu)
         icon.run()
 
 else:
@@ -1515,7 +1575,7 @@ else:
         update_info_window.title("Update Info")
 
         # Create a label that displays version information
-        version_label = Label(update_info_window, text="Version: YT DOWNLOADER PRO TXA V3.7.5", font=("Arial", 14, "bold"), fg="blue")
+        version_label = Label(update_info_window, text="Version: YT DOWNLOADER PRO TXA V3.7.7", font=("Arial", 14, "bold"), fg="blue")
         version_label.pack()
 
         # Create a label to display author information
@@ -1541,6 +1601,7 @@ else:
         feature_listbox.insert(END, "8. Revised voice notification feature and if there is any problem with this feature during download, just ignore it!")
         feature_listbox.insert(END, "9. Add a feature to check network connectivity before entering the application!")
         feature_listbox.insert(END, "10. Change the app logo to celebrate the app's 1 year anniversary!!!")
+        feature_listbox.insert(END, "11. Added option to automatically connect to the server every time you open the app!")
         feature_listbox.insert(END, "👉It's over.")
         # Create a label that displays contact information
         contact_label = Label(update_info_window, text="⛔Any questions please contact via Facebook: https://bom.so/FB_ADMIN!", font=("Times New Roman bold", 14))
@@ -1588,7 +1649,7 @@ else:
         txa.withdraw()
         image=Image.open("logo-app.ico")
         menu=(item('Show app', show_window), item('Quit', quit_window), item('Check for updates', check), item('Website', contact))
-        icon=pystray.Icon("name", image, "YT DOWNLOADER TXA - PRO({lang_sys}) V3.7.5", menu)
+        icon=pystray.Icon("name", image, "YT DOWNLOADER TXA - PRO({lang_sys}) V3.7.7", menu)
         icon.run()
 
 menubadr.add_cascade(label='File', menu=fme, font=("Arial bold", 9))
@@ -1596,7 +1657,10 @@ menubadr.add_cascade(label='Help', menu=hep, font=("Arial bold", 9))
 menubadr.add_cascade(label='Option', menu=opt, font=("Verdana italic", 9))
 
 txa.config(menu=menubadr)
-start_application()
+if check_ne == "True":
+# Gắn sự kiện kiểm tra kết nối mạng khi ứng dụng được mở
+    start_application()
+
 get_date()
 # check_inter()
 txa.bind_all("<Alt-q>", exi)
